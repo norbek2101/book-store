@@ -3,7 +3,8 @@ from store.views import (CategoryListView, CategoryDetailView, AuthorListView, A
                             PublishingListView, PublishingDetailView, BookListView, BookDetailView,
                             CustomerListView, CustomerDetailView, BalanceListView, BalanceDetailView,  
                             OrderListView, OrderDetailView, ItemListView, ItemDetailView,
-                            CommentListView, CommentDetailView, RateListView, RateDetailView
+                            CommentListView, CommentDetailView, RateListView, RateDetailView,
+                            BooksByCategoryView, BooksByAuthorView, BooksByPublishingView,
 )    
                         
 
@@ -20,6 +21,9 @@ urlpatterns = [
 
     path('book/', BookListView.as_view()),
     path('book/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
+    path('book/by/category', BooksByCategoryView.as_view()),
+    path('book/by/author', BooksByAuthorView.as_view()),
+    path('book/by/publishing', BooksByPublishingView.as_view()),
 
     path('customer/', CustomerListView.as_view()),
     path('customer/<int:pk>/', CustomerDetailView.as_view(), name='customer-detail'),

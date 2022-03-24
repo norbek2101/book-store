@@ -11,6 +11,55 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+category_id = openapi.Parameter('category_id', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_INTEGER)
+author_id = openapi.Parameter('author_id', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_INTEGER)
+publishing_id = openapi.Parameter('publishing_id', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_INTEGER)
+
+
+class BooksByCategoryView(APIView):
+    @swagger_auto_schema(
+        operation_description="List of Books releted to specific Category id",
+        manual_parameters=[category_id],
+        responses={200: BookSerializer(many=True)},
+        tags=['Book'],
+    )
+    def get (self, request):
+        books = Book.objects.all().filter(category=request.query_params['category_id'])
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+        
+        
+       
+
+class BooksByAuthorView(APIView):
+    @swagger_auto_schema(
+        operation_description="List of Books releted to specific Author id",
+        manual_parameters=[author_id],
+        responses={200: BookSerializer(many=True)},
+        tags=['Book'],
+    )
+    def get (self, request):
+        books = Book.objects.all().filter(author=request.query_params['author_id'])
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+
+
+class BooksByPublishingView(APIView):
+    @swagger_auto_schema(
+        operation_description="List of Books releted to specific Publishing id",
+        manual_parameters=[publishing_id],
+        responses={200: BookSerializer(many=True)},
+        tags=['Book'],
+    )
+    def get (self, request):
+        books = Book.objects.all().filter(publishing=request.query_params['publishing_id'])
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
 
 
 class CategoryListView(APIView):
