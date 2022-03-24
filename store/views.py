@@ -103,6 +103,19 @@ class CustomerBalanceView(APIView):
         serializer = BalanceSerializer(balance)
         return Response(serializer.data)  
 
+class CustomerOrderView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get The Customer's Orders",
+        manual_parameters=[customer_id],
+        responses={200: OrderSerializer(many=True)},
+        tags=['Customer'],
+    )
+    def get (self, request):
+        customer = request.query_params['customer_id']
+        orders = Order.objects.all().filter(customer=customer)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)  
+
 
 class CategoryListView(APIView):
 
