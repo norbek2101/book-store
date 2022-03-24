@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 
@@ -10,6 +11,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):       
+        return reverse('category-detail', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Category'
@@ -29,6 +33,9 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):       
+        return reverse('author-detail', args=[str(self.id)])
+
     class Meta:
         verbose_name = 'Muallif'
         verbose_name_plural = 'Mualliflar'
@@ -45,6 +52,9 @@ class Publishing(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):       
+        return reverse('publishing-detail', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Nashriyot'
@@ -68,6 +78,9 @@ class Book(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):       
+        return reverse('book-detail', args=[str(self.id)])
+
     class Meta:
         verbose_name = 'Kitob'
         verbose_name_plural = 'Kitoblar'
@@ -88,6 +101,9 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):       
+        return reverse('customer-detail', args=[str(self.id)])
+
     class Meta:
         verbose_name = 'Mijoz'
         verbose_name_plural = 'Mijozlar'
@@ -105,6 +121,9 @@ class Balance(models.Model):
 
     def __str__(self):
         return str(self.customer.name) + ' ' + str(self.amount) 
+
+    def get_absolute_url(self):       
+        return reverse('balance-detail', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Hisob'
@@ -131,6 +150,9 @@ class Order(models.Model):
     def __str__(self):
         return str(self.customer) + ' ' + str(self.price)
 
+    def get_absolute_url(self):       
+        return reverse('order-detail', args=[str(self.id)])
+
     class Meta:
         verbose_name = 'Buyurtma'
         verbose_name_plural = 'Buyurtmalar'
@@ -146,6 +168,9 @@ class Item(models.Model):
 
     def __str__(self):
         return str(self.item)
+
+    def get_absolute_url(self):       
+        return reverse('item-detail', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Item'
@@ -164,6 +189,9 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.book) + ' ' + str(self.customer)
 
+    def get_absolute_url(self):       
+        return reverse('comment-detail', args=[str(self.id)])
+
     class Meta:
         verbose_name = 'Izoh'
         verbose_name_plural = 'Izohlar'
@@ -179,9 +207,12 @@ class Rate(models.Model):
 
     def __str__(self):
         return str(self.point)
+
+    def get_absolute_url(self):       
+        return reverse('rate-detail', args=[str(self.id)])
    
     class Meta:
-        verbose_name = 'Like'
-        verbose_name_plural = 'Likes'
+        verbose_name = 'Rate'
+        verbose_name_plural = 'Rates'
     
 
