@@ -19,7 +19,10 @@ author_id = openapi.Parameter('author_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
 publishing_id = openapi.Parameter('publishing_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
-
+book_id = openapi.Parameter('book_id', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_INTEGER)
+customer_id = openapi.Parameter('customer_id', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_INTEGER)
 
 class BooksByCategoryView(APIView):
     @swagger_auto_schema(
@@ -61,6 +64,45 @@ class BooksByPublishingView(APIView):
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
 
+class AuthorByBookView(APIView):
+    @swagger_auto_schema(
+        operation_description="List of Authors releted to specific Book id",
+        manual_parameters=[book_id],
+        responses={200: AuthorSerializer(many=True)},
+        tags=['Author'],
+    )
+    def get (self, request):
+        book = Book.objects.get(id=request.query_params['book_id'])
+        author = book.author.all()
+        serializer = AuthorSerializer(author, many=True)
+        return Response(serializer.data)  
+
+class PublishingByBookView(APIView):
+    @swagger_auto_schema(
+        operation_description="List of Publishing releted to specific Book id",
+        manual_parameters=[book_id],
+        responses={200: PublishingSerializer(many=True)},
+        tags=['Publishing'],
+    )
+    def get (self, request):
+        book = Book.objects.get(id=request.query_params['book_id'])
+        publishing = book.publishing.all()
+        serializer = PublishingSerializer(publishing, many=True)
+        return Response(serializer.data)    
+
+class CustomerBalanceView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get The Customer's Balance",
+        manual_parameters=[customer_id],
+        responses={200: BalanceSerializer(many=True)},
+        tags=['Customer'],
+    )
+    def get (self, request):
+        customer = request.query_params['customer_id']
+        balance = Balance.objects.get(customer=customer)
+        serializer = BalanceSerializer(balance)
+        return Response(serializer.data)  
+
 
 class CategoryListView(APIView):
 
@@ -69,7 +111,7 @@ class CategoryListView(APIView):
         responses={200: CategorySerializer(many=True)},
         tags=['Category'],
     )
-    def get(self):
+    def get(self, request):
         category = Category.objects.all()
         serializer = CategorySerializer(category, many=True)
         return Response(serializer.data)
@@ -102,7 +144,7 @@ class CategoryDetailView(APIView):
         responses={200: CategorySerializer()},
         tags=['Category'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         category = self.get_object(pk)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
@@ -127,7 +169,7 @@ class CategoryDetailView(APIView):
         responses={204: CategorySerializer()},
         tags=['Category'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         category = self.get_object(pk)
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -140,7 +182,7 @@ class AuthorListView(APIView):
         responses={200: AuthorSerializer(many=True)},
         tags=['Author'],
     )
-    def get(self):
+    def get(self,request):
         author = Author.objects.all()
         serializer = AuthorSerializer(author, many=True)
         return Response(serializer.data)
@@ -173,7 +215,7 @@ class AuthorDetailView(APIView):
         responses={200: AuthorSerializer()},
         tags=['Author'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         author = self.get_object(pk)
         serializer = AuthorSerializer(author)
         return Response(serializer.data)
@@ -198,7 +240,7 @@ class AuthorDetailView(APIView):
         responses={204: AuthorSerializer()},
         tags=['Author'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         author = self.get_object(pk)
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -211,7 +253,7 @@ class PublishingListView(APIView):
         responses={200: PublishingSerializer(many=True)},
         tags=['Publishing'],
     )
-    def get(self):
+    def get(self,request):
         publishing = Publishing.objects.all()
         serializer = PublishingSerializer(publishing, many=True)
         return Response(serializer.data)
@@ -244,7 +286,7 @@ class PublishingDetailView(APIView):
         responses={200: PublishingSerializer()},
         tags=['Publishing'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         publishing = self.get_object(pk)
         serializer = PublishingSerializer(publishing)
         return Response(serializer.data)
@@ -269,7 +311,7 @@ class PublishingDetailView(APIView):
         responses={204: PublishingSerializer()},
         tags=['Publishing'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         publishing = self.get_object(pk)
         publishing.delete()
         return Response(status=status.HTTP_204_NO_CONTENT) 
@@ -282,7 +324,7 @@ class BookListView(APIView):
         responses={200: BookSerializer(many=True)},
         tags=['Book'],
     )
-    def get(self):
+    def get(self,request):
         book = Book.objects.all()
         serializer = BookSerializer(book, many=True)
         return Response(serializer.data)
@@ -315,7 +357,7 @@ class BookDetailView(APIView):
         responses={200: BookSerializer()},
         tags=['Book'],
     )
-    def get(self, pk):
+    def get(self, request,pk):
         book = self.get_object(pk)
         serializer = BookSerializer(book)
         return Response(serializer.data)
@@ -340,7 +382,7 @@ class BookDetailView(APIView):
         responses={204: BookSerializer()},
         tags=['Book'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         book = self.get_object(pk)
         book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT) 
@@ -353,7 +395,7 @@ class CustomerListView(APIView):
         responses={200: CustomerSerializer(many=True)},
         tags=['Customer'],
     )
-    def get(self):
+    def get(self,request):
         customer = Customer.objects.all()
         serializer = CustomerSerializer(customer, many=True)
         return Response(serializer.data)
@@ -386,7 +428,7 @@ class CustomerDetailView(APIView):
         responses={200: CustomerSerializer()},
         tags=['Customer'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         customer = self.get_object(pk)
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
@@ -411,7 +453,7 @@ class CustomerDetailView(APIView):
         responses={204: CustomerSerializer()},
         tags=['Customer'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         customer = self.get_object(pk)
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -424,7 +466,7 @@ class BalanceListView(APIView):
         responses={200: BalanceSerializer(many=True)},
         tags=['Balance'],
     )
-    def get(self):
+    def get(self,request):
         balance = Balance.objects.all()
         serializer = BalanceSerializer(balance, many=True)
         return Response(serializer.data)
@@ -457,7 +499,7 @@ class BalanceDetailView(APIView):
         responses={200: BalanceSerializer()},
         tags=['Balance'],
     )
-    def get(self, pk):
+    def get(self, request,pk):
         balance = self.get_object(pk)
         serializer = BalanceSerializer(balance)
         return Response(serializer.data)
@@ -482,7 +524,7 @@ class BalanceDetailView(APIView):
         responses={204: BalanceSerializer()},
         tags=['Balance'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         balance = self.get_object(pk)
         balance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)     
@@ -495,7 +537,7 @@ class OrderListView(APIView):
         responses={200: CustomerSerializer(many=True)},
         tags=['Order'],
     )
-    def get(self):
+    def get(self,request):
         order = Order.objects.all()
         serializer = OrderSerializer(order, many=True)
         return Response(serializer.data)
@@ -528,7 +570,7 @@ class OrderDetailView(APIView):
         responses={200: OrderSerializer()},
         tags=['Order'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         order = self.get_object(pk)
         serializer = OrderSerializer(order)
         return Response(serializer.data)
@@ -553,7 +595,7 @@ class OrderDetailView(APIView):
         responses={204: OrderSerializer()},
         tags=['Order'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         order = self.get_object(pk)
         order.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)   
@@ -566,7 +608,7 @@ class ItemListView(APIView):
         responses={200: ItemSerializer(many=True)},
         tags=['Item'],
     )
-    def get(self):
+    def get(self,request):
         item = Item.objects.all()
         serializer = ItemSerializer(item, many=True)
         return Response(serializer.data)
@@ -599,7 +641,7 @@ class ItemDetailView(APIView):
         responses={200: ItemSerializer()},
         tags=['Item'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         item = self.get_object(pk)
         serializer = ItemSerializer(item)
         return Response(serializer.data)
@@ -637,7 +679,7 @@ class CommentListView(APIView):
         responses={200: CommentSerializer(many=True)},
         tags=['Comment'],
     )
-    def get(self):
+    def get(self,request):
         comment = Comment.objects.all()
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data)
@@ -670,7 +712,7 @@ class CommentDetailView(APIView):
         responses={200: CommentSerializer()},
         tags=['Comment'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         comment = self.get_object(pk)
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
@@ -695,7 +737,7 @@ class CommentDetailView(APIView):
         responses={204: CommentSerializer()},
         tags=['Comment'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         comment = self.get_object(pk)
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)   
@@ -708,7 +750,7 @@ class RateListView(APIView):
         responses={200: RateSerializer(many=True)},
         tags=['Rate'],
     )
-    def get(self):
+    def get(self,request):
         rate = Rate.objects.all()
         serializer = RateSerializer(rate, many=True)
         return Response(serializer.data)
@@ -741,7 +783,7 @@ class RateDetailView(APIView):
         responses={200: RateSerializer()},
         tags=['Rate'],
     )
-    def get(self, pk):
+    def get(self,request, pk):
         rate = self.get_object(pk)
         serializer = RateSerializer(rate)
         return Response(serializer.data)
@@ -766,7 +808,7 @@ class RateDetailView(APIView):
         responses={204: RateSerializer()},
         tags=['Rate'],
     )
-    def delete(self, pk):
+    def delete(self,request, pk):
         rate = self.get_object(pk)
         rate.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)   

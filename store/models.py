@@ -45,7 +45,7 @@ class Publishing(models.Model):
     name = models.CharField(max_length=100)
     about = models.TextField()
     image = models.ImageField(upload_to="pushlishing_image/%Y/%m/%d", default='default_publisher.jpg', blank=True, null=True)
-    rate = models.IntegerField()
+    rate = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -65,9 +65,9 @@ class Publishing(models.Model):
 class Book(models.Model):
     name = models.CharField(max_length=100)
     author = models.ManyToManyField(Author, related_name="muallif")
-    category = models.ForeignKey(Category, related_name="janr", on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, related_name="janr", on_delete=models.CASCADE)
     publishing = models.ManyToManyField(Publishing, related_name="nashriyot")
-    publishing_date = models.CharField(max_length=10)
+    publishing_date = models.CharField(max_length=10, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to="book_image/%Y/%m/%d", default='default_book.jpg', blank=True, null=True)
     description = models.TextField()
@@ -89,7 +89,7 @@ class Book(models.Model):
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)
-    user = models.OneToOneField(User, related_name="foydalanuchi", on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.OneToOneField(User, related_name="foydalanuchi", on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
     phone = models.PositiveSmallIntegerField()
     email = models.CharField(max_length=200)
@@ -111,10 +111,10 @@ class Customer(models.Model):
 
 
 class Balance(models.Model):
-    customer = models.OneToOneField(Customer, related_name="hisob", on_delete=models.SET_NULL, blank=True, null=True)
-    amount = models.FloatField()
+    customer = models.OneToOneField(Customer, related_name="hisob", on_delete=models.CASCADE)
+    amount = models.FloatField(null=True, blank=True)
     card_number = models.PositiveIntegerField()
-    card_valid_date = models.DateField()
+    card_valid_date = models.CharField(max_length=4)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -131,10 +131,10 @@ class Balance(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer,related_name="mijoz", on_delete=models.SET_NULL, blank=True, null=True)
+    customer = models.ForeignKey(Customer,related_name="mijoz", on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     address = models.CharField(max_length=100)
-    delivered_at = models.DateTimeField()
+    delivered_at = models.CharField(max_length=5)
     STATUS = [
         ('accepted', 'Qabul qilindi'),
         ('not accepted', 'Qabul qilinmadi'),
@@ -161,13 +161,13 @@ class Order(models.Model):
 
 class Item(models.Model):
     item = models.ManyToManyField(Book, related_name="book_item")
-    order = models.ForeignKey(Order, related_name="order_item", on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(Order, related_name="order_item", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
 
     def __str__(self):
-        return str(self.item)
+        return  self.order
 
     def get_absolute_url(self):       
         return reverse('item-detail', args=[str(self.id)])
@@ -180,7 +180,7 @@ class Item(models.Model):
 
 class Comment(models.Model):
     book = models.ManyToManyField(Book,  related_name="book")
-    customer = models.ForeignKey(Customer, related_name="customer", on_delete=models.SET_NULL, blank=True, null=True)
+    customer = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -199,7 +199,7 @@ class Comment(models.Model):
 
 class Rate(models.Model):
     book = models.ManyToManyField(Book, related_name="book_rate")
-    customer = models.ForeignKey(Customer, related_name="customer_rate", on_delete=models.SET_NULL, blank=True, null=True)
+    customer = models.ForeignKey(Customer, related_name="customer_rate", on_delete=models.CASCADE)
     point = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
