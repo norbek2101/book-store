@@ -2,8 +2,10 @@ from django.http import Http404
 
 from store.models import (Category, Author, Publishing, Book, Customer, Balance, Order, Item, Comment, Rate)
 from store.serializers import (CategorySerializer, AuthorSerializer, PublishingSerializer, BookSerializer, 
-CustomerSerializer, BalanceSerializer, OrderSerializer, ItemSerializer, CommentSerializer, RateSerializer)
-
+                                CustomerSerializer, BalanceSerializer, OrderSerializer, ItemSerializer, 
+                                CommentSerializer, RateSerializer
+                            )
+                            
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -46,12 +48,6 @@ class CategoryDetailView(APIView):
         except Category.DoesNotExist:
             raise Http404
 
-    def get_all_books(self, request, pk):
-        """Retrieves all books releted to Category"""
-        books = Book.objects.all().filter(category=pk)
-        return {'books': books}
-
-
     @swagger_auto_schema(
         operation_description="Get a Category",
         responses={200: CategorySerializer()},
@@ -61,7 +57,6 @@ class CategoryDetailView(APIView):
         category = self.get_object(pk)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
-
 
 
     @swagger_auto_schema(
@@ -123,12 +118,6 @@ class AuthorDetailView(APIView):
             return Author.objects.get(pk=pk)
         except Author.DoesNotExist:
             raise Http404
-
-    def get_all_books(self, request, pk):
-        """Retrieves all books releted to Author"""
-        books = Book.objects.all().filter(author=pk)
-        return {'books': books}
-
 
     @swagger_auto_schema(
         operation_description="Get an Author",
@@ -200,11 +189,6 @@ class PublishingDetailView(APIView):
             return Publishing.objects.get(pk=pk)
         except Publishing.DoesNotExist:
             raise Http404
-
-    def get_all_books(self, request, pk):
-        """Retrieves all books releted to Publishing"""
-        books = Book.objects.all().filter(publishing=pk)
-        return {'books': books}
 
     @swagger_auto_schema(
         operation_description="Get a Publishing",
@@ -717,7 +701,7 @@ class RateDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Rate",
         responses={206: RateSerializer()},
-        tags=['Rate'],
+        tags=['Item'],
     )
     def put(self, request, pk):
         rate = self.get_object(pk)
