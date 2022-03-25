@@ -140,7 +140,20 @@ class BookCommentView(APIView):
         book = request.query_params['book_id']
         comments = Comment.objects.all().filter(book=book)
         serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data) 
+        return Response(serializer.data)
+
+class OrderItemView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get The Order's Items",
+        manual_parameters=[order_id],
+        responses={200: ItemSerializer(many=True)},
+        tags=['Item'],
+    )
+    def get (self, request):
+        order = request.query_params['order_id']
+        items = Item.objects.all().filter(order=order)
+        serializer = ItemSerializer(items, many=True)
+        return Response(serializer.data)  
 
 
 
