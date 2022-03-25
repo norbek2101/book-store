@@ -23,6 +23,8 @@ book_id = openapi.Parameter('book_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
 customer_id = openapi.Parameter('customer_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
+order_id = openapi.Parameter('order_id', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_INTEGER)
 
 class BooksByCategoryView(APIView):
     @swagger_auto_schema(
@@ -35,9 +37,7 @@ class BooksByCategoryView(APIView):
         books = Book.objects.all().filter(category=request.query_params['category_id'])
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
-        
-        
-       
+                     
 
 class BooksByAuthorView(APIView):
     @swagger_auto_schema(
@@ -115,6 +115,21 @@ class CustomerOrderView(APIView):
         orders = Order.objects.all().filter(customer=customer)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)  
+
+class CustomerCommentView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get The Customer's Comments",
+        manual_parameters=[customer_id],
+        responses={200: CommentSerializer(many=True)},
+        tags=['Comment'],
+    )
+    def get (self, request):
+        customer = request.query_params['customer_id']
+        comments = Comment.objects.all().filter(customer=customer)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data) 
+
+
 
 
 class CategoryListView(APIView):
