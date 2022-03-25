@@ -9,6 +9,7 @@ from store.serializers import (CategorySerializer, AuthorSerializer, PublishingS
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import permissions
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -27,6 +28,7 @@ order_id = openapi.Parameter('order_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
 
 class BooksByCategoryView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Books releted to specific Category id",
         manual_parameters=[category_id],
@@ -40,6 +42,7 @@ class BooksByCategoryView(APIView):
                      
 
 class BooksByAuthorView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Books releted to specific Author id",
         manual_parameters=[author_id],
@@ -53,6 +56,7 @@ class BooksByAuthorView(APIView):
 
 
 class BooksByPublishingView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Books releted to specific Publishing id",
         manual_parameters=[publishing_id],
@@ -65,6 +69,7 @@ class BooksByPublishingView(APIView):
         return Response(serializer.data)
 
 class AuthorByBookView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Authors releted to specific Book id",
         manual_parameters=[book_id],
@@ -78,6 +83,7 @@ class AuthorByBookView(APIView):
         return Response(serializer.data)  
 
 class PublishingByBookView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Publishing releted to specific Book id",
         manual_parameters=[book_id],
@@ -91,6 +97,7 @@ class PublishingByBookView(APIView):
         return Response(serializer.data)    
 
 class CustomerBalanceView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Get The Customer's Balance",
         manual_parameters=[customer_id],
@@ -104,6 +111,7 @@ class CustomerBalanceView(APIView):
         return Response(serializer.data)  
 
 class CustomerOrderView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Get The Customer's Orders",
         manual_parameters=[customer_id],
@@ -117,6 +125,7 @@ class CustomerOrderView(APIView):
         return Response(serializer.data)  
 
 class CustomerCommentView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Get The Customer's Comments",
         manual_parameters=[customer_id],
@@ -130,6 +139,7 @@ class CustomerCommentView(APIView):
         return Response(serializer.data) 
 
 class BookCommentView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Get The Book's Comments",
         manual_parameters=[book_id],
@@ -143,6 +153,7 @@ class BookCommentView(APIView):
         return Response(serializer.data)
 
 class OrderItemView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Get The Order's Items",
         manual_parameters=[order_id],
@@ -156,6 +167,7 @@ class OrderItemView(APIView):
         return Response(serializer.data) 
 
 class BookRateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Get The Book's Rates",
         manual_parameters=[book_id],
@@ -169,9 +181,8 @@ class BookRateView(APIView):
         return Response(serializer.data) 
 
 
-
 class CategoryListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Catgories",
         responses={200: CategorySerializer(many=True)},
@@ -198,7 +209,7 @@ class CategoryListView(APIView):
 
 
 class CategoryDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Category.objects.get(pk=pk)
@@ -242,7 +253,7 @@ class CategoryDetailView(APIView):
 
 
 class AuthorListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Authors",
         responses={200: AuthorSerializer(many=True)},
@@ -269,7 +280,7 @@ class AuthorListView(APIView):
 
 
 class AuthorDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Author.objects.get(pk=pk)
@@ -313,7 +324,7 @@ class AuthorDetailView(APIView):
 
 
 class PublishingListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Publishings",
         responses={200: PublishingSerializer(many=True)},
@@ -340,7 +351,7 @@ class PublishingListView(APIView):
 
 
 class PublishingDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Publishing.objects.get(pk=pk)
@@ -384,7 +395,7 @@ class PublishingDetailView(APIView):
 
 
 class BookListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Books",
         responses={200: BookSerializer(many=True)},
@@ -411,7 +422,7 @@ class BookListView(APIView):
 
 
 class BookDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Book.objects.get(pk=pk)
@@ -455,7 +466,7 @@ class BookDetailView(APIView):
 
 
 class CustomerListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Customers",
         responses={200: CustomerSerializer(many=True)},
@@ -482,7 +493,7 @@ class CustomerListView(APIView):
 
 
 class CustomerDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Customer.objects.get(pk=pk)
@@ -526,7 +537,7 @@ class CustomerDetailView(APIView):
 
 
 class BalanceListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Balances",
         responses={200: BalanceSerializer(many=True)},
@@ -553,7 +564,7 @@ class BalanceListView(APIView):
 
 
 class BalanceDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Balance.objects.get(pk=pk)
@@ -597,7 +608,7 @@ class BalanceDetailView(APIView):
 
 
 class OrderListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Orders",
         responses={200: CustomerSerializer(many=True)},
@@ -624,7 +635,7 @@ class OrderListView(APIView):
 
 
 class OrderDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Order.objects.get(pk=pk)
@@ -668,7 +679,7 @@ class OrderDetailView(APIView):
 
 
 class ItemListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Items",
         responses={200: ItemSerializer(many=True)},
@@ -695,7 +706,7 @@ class ItemListView(APIView):
 
 
 class ItemDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Item.objects.get(pk=pk)
@@ -739,7 +750,7 @@ class ItemDetailView(APIView):
 
 
 class CommentListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Comments",
         responses={200: CommentSerializer(many=True)},
@@ -766,7 +777,7 @@ class CommentListView(APIView):
 
 
 class CommentDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Comment.objects.get(pk=pk)
@@ -810,7 +821,7 @@ class CommentDetailView(APIView):
 
 
 class RateListView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(
         operation_description="List of Rates",
         responses={200: RateSerializer(many=True)},
@@ -837,7 +848,7 @@ class RateListView(APIView):
 
 
 class RateDetailView(APIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_object(self, pk):
         try:
             return Rate.objects.get(pk=pk)
