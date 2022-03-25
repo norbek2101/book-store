@@ -129,6 +129,18 @@ class CustomerCommentView(APIView):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data) 
 
+class BookCommentView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get The Book's Comments",
+        manual_parameters=[book_id],
+        responses={200: CommentSerializer(many=True)},
+        tags=['Comment'],
+    )
+    def get (self, request):
+        book = request.query_params['book_id']
+        comments = Comment.objects.all().filter(book=book)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data) 
 
 
 
