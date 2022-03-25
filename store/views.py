@@ -153,7 +153,20 @@ class OrderItemView(APIView):
         order = request.query_params['order_id']
         items = Item.objects.all().filter(order=order)
         serializer = ItemSerializer(items, many=True)
-        return Response(serializer.data)  
+        return Response(serializer.data) 
+
+class BookRateView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get The Book's Rates",
+        manual_parameters=[book_id],
+        responses={200: RateSerializer(many=True)},
+        tags=['Rate'],
+    )
+    def get (self, request):
+        book = request.query_params['book_id']
+        rates = Rate.objects.all().filter(book=book)
+        serializer = RateSerializer(rates, many=True)
+        return Response(serializer.data) 
 
 
 
