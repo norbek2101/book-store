@@ -230,6 +230,7 @@ class CategoryDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Category",
         responses={206: CategorySerializer()},
+        request_body= CategorySerializer,
         tags=['Category'],
     )
     def put(self, request, pk):
@@ -301,6 +302,7 @@ class AuthorDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Author",
         responses={206: AuthorSerializer()},
+        request_body= AuthorSerializer,
         tags=['Author'],
     )
     def put(self, request, pk):
@@ -372,6 +374,7 @@ class PublishingDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Publishing",
         responses={206: PublishingSerializer()},
+        request_body= PublishingSerializer,
         tags=['Publishing'],
     )
     def put(self, request, pk):
@@ -443,6 +446,7 @@ class BookDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the book",
         responses={206: BookSerializer()},
+        request_body= BookSerializer,
         tags=['Book'],
     )
     def put(self, request, pk):
@@ -505,7 +509,7 @@ class CustomerDetailView(APIView):
         responses={200: CustomerSerializer()},
         tags=['Customer'],
     )
-    def get(self,request, pk):
+    def get(self,request, pk, format=None):
         customer = self.get_object(pk)
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
@@ -514,9 +518,10 @@ class CustomerDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Customer",
         responses={206: CustomerSerializer()},
+        request_body= CustomerSerializer,
         tags=['Customer'],
     )
-    def put(self, request, pk):
+    def put(self, request, pk, format=None):
         customer = self.get_object(pk)
         serializer = CustomerSerializer(customer, data=request.data, partial=True)
         if serializer.is_valid():
@@ -585,6 +590,7 @@ class BalanceDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Balance",
         responses={206: BalanceSerializer()},
+        request_body= BalanceSerializer,
         tags=['Balance'],
     )
     def put(self, request, pk):
@@ -656,6 +662,7 @@ class OrderDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Order",
         responses={206: OrderSerializer()},
+        request_body= OrderSerializer,
         tags=['Order'],
     )
     def put(self, request, pk):
@@ -727,6 +734,7 @@ class ItemDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Item",
         responses={206: ItemSerializer()},
+        request_body= ItemSerializer,
         tags=['Item'],
     )
     def put(self, request, pk):
@@ -798,6 +806,7 @@ class CommentDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Comment",
         responses={206: CommentSerializer()},
+        request_body= CommentSerializer,
         tags=['Comment'],
     )
     def put(self, request, pk):
@@ -869,6 +878,7 @@ class RateDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Update the Rate",
         responses={206: RateSerializer()},
+        request_body= RateSerializer,
         tags=['Item'],
     )
     def put(self, request, pk):

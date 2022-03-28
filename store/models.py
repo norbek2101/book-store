@@ -65,7 +65,7 @@ class Publishing(models.Model):
 class Book(models.Model):
     name = models.CharField(max_length=100)
     author = models.ManyToManyField(Author, related_name="muallif")
-    category = models.ForeignKey(Category, related_name="janr", on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name="janr", on_delete=models.CASCADE, null=True)
     publishing = models.ManyToManyField(Publishing, related_name="nashriyot")
     publishing_date = models.CharField(max_length=10, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -89,7 +89,7 @@ class Book(models.Model):
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)
-    user = models.OneToOneField(User, related_name="foydalanuchi", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name="customer", on_delete=models.CASCADE, null=True)
     address = models.CharField(max_length=100)
     phone = models.PositiveSmallIntegerField()
     email = models.CharField(max_length=200)
@@ -111,7 +111,7 @@ class Customer(models.Model):
 
 
 class Balance(models.Model):
-    customer = models.OneToOneField(Customer, related_name="hisob", on_delete=models.CASCADE)
+    customer = models.OneToOneField(Customer, related_name="hisob", on_delete=models.CASCADE, null=True)
     amount = models.FloatField(null=True, blank=True)
     card_number = models.PositiveIntegerField()
     card_valid_date = models.CharField(max_length=4)
@@ -120,7 +120,7 @@ class Balance(models.Model):
 
 
     def __str__(self):
-        return str(self.customer.name) + ' ' + str(self.amount) 
+        return  str(self.customer) 
 
     def get_absolute_url(self):       
         return reverse('balance-detail', args=[str(self.id)])
@@ -131,10 +131,10 @@ class Balance(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer,related_name="mijoz", on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    customer = models.ForeignKey(Customer,related_name="mijoz", on_delete=models.CASCADE, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     address = models.CharField(max_length=100)
-    delivered_at = models.CharField(max_length=5)
+    # delivered_at = models.CharField(max_length=5)
     STATUS = [
         ('accepted', 'Qabul qilindi'),
         ('not accepted', 'Qabul qilinmadi'),
@@ -161,7 +161,7 @@ class Order(models.Model):
 
 class Item(models.Model):
     item = models.ManyToManyField(Book, related_name="book_item")
-    order = models.ForeignKey(Order, related_name="order_item", on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name="order_item", on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
