@@ -64,9 +64,9 @@ class Publishing(models.Model):
 
 class Book(models.Model):
     name = models.CharField(max_length=100)
-    author = models.ManyToManyField(Author, related_name="muallif")
-    category = models.ForeignKey(Category, related_name="janr", on_delete=models.CASCADE, null=True)
-    publishing = models.ManyToManyField(Publishing, related_name="nashriyot")
+    author = models.ManyToManyField(Author)
+    category = models.ForeignKey(Category,  on_delete=models.CASCADE, null=True)
+    publishing = models.ManyToManyField(Publishing)
     publishing_date = models.CharField(max_length=10, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to="book_image/%Y/%m/%d", default='default_book.jpg', blank=True, null=True)
@@ -180,7 +180,7 @@ class Item(models.Model):
 
 class Comment(models.Model):
     book = models.ManyToManyField(Book,  related_name="book")
-    customer = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -199,7 +199,7 @@ class Comment(models.Model):
 
 class Rate(models.Model):
     book = models.ManyToManyField(Book, related_name="book_rate")
-    customer = models.ForeignKey(Customer, related_name="customer_rate", on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, related_name="customer_rate", on_delete=models.CASCADE, null=True, blank=True)
     point = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

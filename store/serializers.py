@@ -146,7 +146,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('price', 'address')
+        fields = ('price', 'address', 'status')
 
     def create(self, validated_data):
         return super().create(validated_data)
@@ -187,6 +187,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
 
 class RateSerializer(serializers.ModelSerializer):
 

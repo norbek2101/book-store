@@ -26,6 +26,8 @@ customer_id = openapi.Parameter('customer_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
 order_id = openapi.Parameter('order_id', in_=openapi.IN_QUERY,
                            type=openapi.TYPE_INTEGER)
+order_status = openapi.Parameter('order_status', in_=openapi.IN_QUERY,
+                           type=openapi.TYPE_STRING)
 
 class BooksByCategoryView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -180,6 +182,23 @@ class BookRateView(APIView):
         serializer = RateSerializer(rates, many=True)
         return Response(serializer.data) 
 
+
+class OrderByStatus(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    @swagger_auto_schema(
+        operation_description="Get The Order's Status",
+        manual_parameters=[order_status],
+        responses={200: OrderSerializer(many=True)},
+        tags=['Order'],
+    )
+    def get (self, request):
+        status = request.query_params['order_status']
+        orders = Order.objects.all().filter(status=status)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+
+ 
 
 class CategoryListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
