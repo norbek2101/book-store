@@ -30,9 +30,10 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = '__all__'
+        fields = ('name', 'about')
 
     def create(self, validated_data):
+
         return Author.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

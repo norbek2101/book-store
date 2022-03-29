@@ -44,13 +44,13 @@ urlpatterns = [
     path('itembyorder/', OrderItemView.as_view()),
     path('item/<int:pk>/', ItemDetailView.as_view(), name='item-detail'),
 
-    # path('comment/', CommentListView.as_view()),
-    # path('commentbycustomer/', CustomerCommentView.as_view()),
-    # path('commentbybook/', BookCommentView.as_view()),
-    # path('comment/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
+    path('comment/', CommentListView.as_view()),
+    path('commentbycustomer/', CustomerCommentView.as_view()),
+    path('commentbybook/', BookCommentView.as_view()),
+    path('comment/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
 
-    # path('rate/', RateListView.as_view()),
-    # path('rateofbook/', BookRateView.as_view()),
-    # path('rate/<int:pk>/', RateDetailView.as_view(), name='rate-detail'),
+    path('rate/', RateListView.as_view()),
+    path('rateofbook/', BookRateView.as_view()),
+    path('rate/<int:pk>/', RateDetailView.as_view(), name='rate-detail'),
     
 ]
