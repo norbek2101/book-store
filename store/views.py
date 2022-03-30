@@ -7,6 +7,8 @@ from store.serializers import (CategorySerializer, AuthorSerializer, PublishingS
                             )
                             
 from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework import mixins
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
@@ -654,7 +656,8 @@ class OrderListView(APIView):
     def post(self, request):
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            customer = self.request.user.customer
+            serializer.save(customer=customer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -726,7 +729,7 @@ class ItemListView(APIView):
     def post(self, request):
         serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(customer=request.user.customer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -798,9 +801,11 @@ class CommentListView(APIView):
     def post(self, request):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            customer = self.request.user.customer
+            serializer.save(customer=customer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class CommentDetailView(APIView):

@@ -45,7 +45,7 @@ urlpatterns = [
     path('itembyorder/', OrderItemView.as_view()),
     path('item/<int:pk>/', ItemDetailView.as_view(), name='item-detail'),
 
-    path('comment/', CommentListView.as_view()),
+    path('comment/', CommentListView.as_view(), name='comment-list'),
     path('commentbycustomer/', CustomerCommentView.as_view()),
     path('commentbybook/', BookCommentView.as_view()),
     path('comment/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),

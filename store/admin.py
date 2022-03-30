@@ -9,6 +9,11 @@ admin.site.register(Customer)
 admin.site.register(Balance)
 admin.site.register(Order)
 admin.site.register(Item)
-admin.site.register(Comment)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'customer', 'book')
+    list_editable = ('customer', 'book',)
+
 admin.site.register(Rate)
 

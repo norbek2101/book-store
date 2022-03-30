@@ -65,11 +65,18 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = '__all__'
 
-    def create(self, validated_data):
-        return Book.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+    # def to_representation(self, instance):
+    #     #  data = super(CustomerSerializer, self).to_representation(instance)
+    #      data = {}
+    #     #  data['category'] = instance.category.name
+    #      data['name'] = instance.name
+    #     #  data['author'] = instance.author.name
+    #     #  data['publishing'] = instance.publishing.name
+    #      data['price'] = instance.price
+    #      data['description'] = instance.description
+    #      data['created_at'] = instance.created_at
+    #      data['updated_at'] = instance.updated_at
+    #      return data 
 
 
 class BalanceSerializer(serializers.ModelSerializer):
@@ -146,34 +153,39 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('price', 'address', 'status')
+        fields =  '__all__'
+        read_only_fields = ['customer']
 
-    def create(self, validated_data):
-        return super().create(validated_data)
 
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-
+ 
 
 class ItemSerializer(serializers.ModelSerializer):
-    price = serializers.DecimalField(required=True, write_only=True, max_digits=10, decimal_places=2)
-    address = serializers.CharField(required=True, write_only=True)
+    # price = serializers.DecimalField(required=True, write_only=True, max_digits=10, decimal_places=2)
+    # address = serializers.CharField(required=True, write_only=True)
 
-    class Meta:
+    item = BookSerializer(many=True)
+
+    class Meta: 
         model = Item
-        fields = ('price', 'address')
+        fields = ('id','item')
+
+    # def to_representation(self, instance):
+    #     #  data = super(CustomerSerializer, self).to_representation(instance)
+    #      data = {}
+    #      data['id'] = instance.id
+    #      data['item'] = instance.item
+    #      data['customer'] = instance.customer
+    #      data['created_at'] = instance.created_at
+    #      data['updated_at'] = instance.updated_at
+    #      return data 
 
 
     def create(self, validated_data):
-        price = validated_data.pop('price')
-        address = validated_data.pop('address')
-        order = Order.objects.create(price=price, address=address)
-        item = Item.objects.create(order=order, **validated_data)
+        item = Item.objects.create(**validated_data)
         item.save()
         return  item
 
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+    
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -181,12 +193,9 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+        read_only_fields = ['customer']
+        
 
-    def create(self, validated_data):
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
 
 
 class RateSerializer(serializers.ModelSerializer):
@@ -194,11 +203,3 @@ class RateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rate
         fields = '__all__'
-
-    def create(self, validated_data):
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-
-
