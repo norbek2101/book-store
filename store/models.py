@@ -68,7 +68,7 @@ class Book(models.Model):
     category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, null=True, default='1')
     publishing = models.ForeignKey(Publishing, related_name='publishing', on_delete=models.CASCADE, null=True, default='1')
     publishing_date = models.CharField(max_length=10, null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     image = models.ImageField(upload_to="book_image/%Y/%m/%d", default='default_book.jpg', blank=True, null=True)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -76,7 +76,7 @@ class Book(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return f"{self.id}--{self.name}"
 
     def get_absolute_url(self):       
         return reverse('book-detail', args=[str(self.id)])
@@ -133,7 +133,7 @@ class Balance(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer,related_name="customer_order", on_delete=models.CASCADE, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=100, null=True)
     # delivered_at = models.CharField(max_length=5)
     STATUS = [
         ('accepted', 'Qabul qilindi'),

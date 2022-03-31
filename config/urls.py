@@ -26,7 +26,7 @@ schema_view = get_schema_view(
    openapi.Info(
       title="UcharKitobAPI",
       default_version='v1',
-      description="UcharKitob API",
+      description="UcharKitob API (This is a bugfull api version)",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@ucharkitobapi.uz"),
       license=openapi.License(name="BSD License"),

@@ -65,19 +65,7 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = '__all__'
 
-    # def to_representation(self, instance):
-    #     #  data = super(CustomerSerializer, self).to_representation(instance)
-    #      data = {}
-    #     #  data['category'] = instance.category.name
-    #      data['name'] = instance.name
-    #     #  data['author'] = instance.author.name
-    #     #  data['publishing'] = instance.publishing.name
-    #      data['price'] = instance.price
-    #      data['description'] = instance.description
-    #      data['created_at'] = instance.created_at
-    #      data['updated_at'] = instance.updated_at
-    #      return data 
-
+  
 
 class BalanceSerializer(serializers.ModelSerializer):
 
@@ -105,7 +93,6 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
     def to_representation(self, instance):
-        #  data = super(CustomerSerializer, self).to_representation(instance)
          data = {}
          data['username'] = instance.user.username
          data['name'] = instance.name
@@ -157,33 +144,36 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ['customer']
 
 
- 
+# class OrderBookSerializer(serializers.Serializer):
+#     class Meta:
+#         model = Book
+#         fields = ('id',)
+
 
 class ItemSerializer(serializers.ModelSerializer):
-    # price = serializers.DecimalField(required=True, write_only=True, max_digits=10, decimal_places=2)
-    # address = serializers.CharField(required=True, write_only=True)
-
-    item = BookSerializer(many=True)
-
     class Meta: 
         model = Item
-        fields = ('id','item')
+        fields =  ('id','book')
+    # depth = 1
 
     # def to_representation(self, instance):
-    #     #  data = super(CustomerSerializer, self).to_representation(instance)
-    #      data = {}
-    #      data['id'] = instance.id
-    #      data['item'] = instance.item
-    #      data['customer'] = instance.customer
-    #      data['created_at'] = instance.created_at
-    #      data['updated_at'] = instance.updated_at
-    #      return data 
+    #     data = {}
+    #     data['id'] = instance.id
+    #     data['items'] = instance.items
+    #     data['created_at'] = instance.created_at
+    #     data['updated_at'] = instance.updated_at
+    #     return data
 
 
     def create(self, validated_data):
+        book = validated_data.pop('book')
         item = Item.objects.create(**validated_data)
+        item.book.add(*book)
         item.save()
-        return  item
+        return item
+
+
+ 
 
     
 
